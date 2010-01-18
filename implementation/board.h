@@ -7,7 +7,7 @@ typedef unsigned int uint;
 
 namespace Hex {
 
-const uint kBoardSize = 11;
+const uint kBoardSize = 11; 
 const uint kBoardSizeAligned = 13;	// kBoardSize + 2
 
 // -----------------------------------------------------------------------------
@@ -39,8 +39,8 @@ class Player {
 
   Player Opponent() const;
 
-  bool operator== (const Player&);
-  bool operator!= (const Player&);
+  bool operator== (const Player&) const;
+  bool operator!= (const Player&) const;
 
   uint GetVal();
 
@@ -61,10 +61,12 @@ class Location {
   static Location OfCoords (std::string);
   Location (uint pos);
   Location (uint x, uint y);
+  static Location Swap();
   uint GetPos() const;
   std::string ToCoords() const;
   bool operator==(Location loc) const;
   bool operator!=(Location loc) const;
+  Location Mirrored() const;
   static bool ValidLocation(const std::string& location);
   static bool ValidLocation(uint x, uint y);
   static bool ValidPosition(uint pos);
@@ -106,13 +108,16 @@ class Board {
   Player CurrentPlayer() const;
   Move RandomLegalMove (const Player&) const;
   void PlayLegal (const Move&);
+  void Swap();
   bool IsFull() const;
   Player Winner() const;
   void Load (const Board&);
   uint MovesLeft() const;
   void GetPossiblePositions(ushort_ptr& locations);
   std::string ToAsciiArt(Location last_move) const;
-  bool IsValidMove(const Move& move);
+  bool IsValidMove(const Move& move) const;
+  Location FirstMove() const;
+  bool ShouldSwap(const Player&) const;
 
  private:
   void MakeUnion(uint pos);

@@ -17,11 +17,19 @@ void Game::ClearBoard() {
 void Game::Play(const Move& move) {
 	ASSERT(current_board.IsValidMove(move));
 	current_board.PlayLegal(move);
-	last_move = move.GetLocation();
+        if (move.GetLocation() == Location::Swap()) {
+                last_move = current_board.FirstMove();
+        }
+        else {
+                last_move = move.GetLocation();
+        }
 }
 
 Move Game::GenMove(Player player) {
 	ASSERT(!current_board.IsFull());
+        if (current_board.ShouldSwap(player)) {
+                return Move(player, Location::Swap());
+        }
 	return tree.BestMove(player, current_board);
 }
 
